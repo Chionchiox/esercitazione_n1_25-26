@@ -6,7 +6,7 @@ public class Giocatore extends Thread {
     private int punteggio;
     private int numero_scelto;
     private GestoreGioco gg;
-    private Scanner scan = new Scanner(System.in);
+    private final Scanner scan = new Scanner(System.in);
 
     // --- SETUP ---
     public Giocatore(String nome) {
@@ -15,7 +15,7 @@ public class Giocatore extends Thread {
         gg = new GestoreGioco(18);
 
         do {
-            System.out.print(nome + " inserisci il tuo numero fortunato(1-10): ");
+            System.out.print(nome + " inserisci il tuo numero fortunato(1-20): ");
             numero_scelto = scan.nextInt();
             if (numero_scelto < 1 || numero_scelto > 10) System.out.println("Numero inserito non valido. Reinserire.");
         }while(numero_scelto < 1 || numero_scelto > 10);
@@ -29,13 +29,19 @@ public class Giocatore extends Thread {
     public Giocatore(String nome, int numero_scelto, GestoreGioco gg) {
         this.nome = nome;
         this.numero_scelto = numero_scelto;
+        this.punteggio = 0;
         this.gg = gg;
     }
 
+    public String getNome(){return this.nome;}
+    public int getPunteggio(){return this.punteggio;}
+
     // --- METODI VARI ---
     private void gioca() {
-        if(gg.verifica(numero_scelto)) System.out.println(nome + " hai vinto!");
-        else System.out.println(nome + " hai perso!");
+        punteggio += gg.assegnaPunteggio(numero_scelto);
+        if(gg.verifica(numero_scelto) == 1) System.out.println(nome + " hai indovinato! +2pt.");
+        else if(gg.verifica(numero_scelto) == 2) System.out.println(nome + " c'eri quasi! +1pt.");
+        else System.out.println(nome + " hai sbagliato! +0pt.");
     }
 
     public void comunica() {
