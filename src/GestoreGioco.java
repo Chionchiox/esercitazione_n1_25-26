@@ -52,7 +52,7 @@ public class GestoreGioco {
      * @return 2 punti se giusto, 1 se vicino, 0 se sbagliato
      */
     public int assegnaPunteggio(int num){
-        int diff = Math.abs(num - this.numeroVincente);
+        int diff = Math.abs(num - this.numeroVincente);             // Ritorna il valore assoluto della differenza
         if(diff == 0) return 2;
         else if(diff == 1) return 1;
         return 0;
@@ -94,7 +94,7 @@ public class GestoreGioco {
     public void mostraClassifica(Giocatore[] giocatori) {
         Giocatore[] giocatoriClassificati = classifica(giocatori);
         for(int i = 0; i<giocatori.length; i++)
-            System.out.printf("%d° %s %d\n", i+1, giocatoriClassificati[i].getNome(), giocatoriClassificati[i].getPunteggio());
+            System.out.printf("%d° %s %dpt\n", i+1, giocatoriClassificati[i].getNome(), giocatoriClassificati[i].getPunteggio());
     }
 }
 
