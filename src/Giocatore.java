@@ -1,8 +1,6 @@
 /**
  * La classe {@code Giocatore} rappresnta un giocatore con tutte le sue caratteristiche, quali: nome, punteggio e numero scelto.
  * Ogni giocatore è implementato come un {@link Thread} che verrà eseguito indipendentemente dagli altri giocatori.
- *
- * @author Francesco Chionchio
  */
 public class Giocatore extends Thread {
     // --- ATTRIBUTI ---

@@ -1,9 +1,11 @@
 /**
  * La classe {@code GestoreGioco} si occupa della logica principale del gioco.
  * Contiene la variabile numeroVincente, nella quale viene salvato il numero estratto randomicamente e le seguenti funzioni:
- *  - Verificare se i numeri inseriti sono uguali a quello estratto;
- *  - Assegnare e aggiornare il punteggio di ogni giocatore;
- *  - Crea e mostra la classifica dei gioccatori in base al loro punteggio.
+ * <p>
+ *  - Verificare se i numeri inseriti sono uguali a quello estratto; <br>
+ *  - Assegnare e aggiornare il punteggio di ogni giocatore; <br>
+ *  - Crea e mostra la classifica dei gioccatori in base al loro punteggio. <br>
+ * </p>
  * */
 public class GestoreGioco {
     // --- ATTRIBUTI ---

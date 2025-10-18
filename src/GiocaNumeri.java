@@ -16,6 +16,7 @@ public class GiocaNumeri {
     private static final Scanner scan = new Scanner(System.in);
     private static final Random rand = new Random();
     private static int NUM_PLAYER;
+    private static int numMassimo = 0;
 
     /**
      * Legge in input il numero di giocatori partecipanti.
@@ -28,6 +29,41 @@ public class GiocaNumeri {
             if (NUM_PLAYER > 4 || NUM_PLAYER < 1) System.out.println("Numero di giocatori non valido. Reinserire.");
         } while (NUM_PLAYER < 1 || NUM_PLAYER > 4);
         scan.nextLine();                                                             //Consumiamo il newline generato dal nextInt()
+    }
+
+    /**
+     * Legge in input la difficoltà scelta dall'utente e stabilisce il corrispettivo range di numeri.
+     * <p>
+     *     - 1 = facile (massimo 10) <br>
+     *     - 2 = medio (massimo 20) <br>
+     *     - 3 = difficile (massimo 30) <br>
+     *     - 4 = estremo (massimo 50) <br>
+     * </p>
+     * */
+    public static void leggiDifficolta(){
+        int DIFFICOLTA;
+        do {
+            System.out.print("Inserisci la difficoltà desiderata: ");
+            DIFFICOLTA = scan.nextInt();
+            switch (DIFFICOLTA){
+                case 1:
+                    numMassimo = 11;
+                    break;
+                case 2:
+                    numMassimo = 21;
+                    break;
+                case 3:
+                    numMassimo = 31;
+                    break;
+                case 4:
+                    numMassimo = 51;
+                    break;
+                default:
+                    System.out.println("Il numero inserito non corrisponde a nessuna difficoltà. Reinserire.");
+                    break;
+            }
+        } while (DIFFICOLTA < 1 || DIFFICOLTA > 4);
+        scan.nextLine();
     }
 
     /**
@@ -47,7 +83,7 @@ public class GiocaNumeri {
     /**
      * Avvia i thread e richiama su di essi {@code .join()} per farli lavorare in serie.
      * */
-    public static void inziaPartita(Giocatore[] giocatori){
+    public static void iniziaPartita(Giocatore[] giocatori){
         for(Giocatore g : giocatori)
             g.start();
 
@@ -65,12 +101,15 @@ public class GiocaNumeri {
      * Metodo principale. Avvia e gestisce tutto il gioco.
      */
     // --- MAIN ---
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         //Inizia il gioco
-        int numeroVincente = rand.nextInt(1, 21);                // Generiamo il numero vincente casualmetne (tra 1 e 20)
+        int numeroVincente = rand.nextInt(1, numMassimo);                // Generiamo il numero vincente casualmente (tra 1 e 20)
         System.out.println("=== INIZIA IL GIOCO ===");
         System.out.println("Tenta la tua fortuna!\nHai 3 round nei quali dovrai cercare di accumulare più punti possibili!");
+        System.out.println("Difficoltà:\n1 -> SEMPLICE (1-10)\n2 -> MEDIO (1-20)\n3 -> DIFFICILE (1-30)\n4 -> ESTREMO (1-50)");
+
+        leggiDifficolta();                                                    // Leggiamo in input la difficoltà della partita
 
         leggiNumeroGiocatori();                                               // Leggiamo in input il numero dei giocatori
 
@@ -82,22 +121,22 @@ public class GiocaNumeri {
         for (int round = 1; round <= 3; round++) {                            // Ciclo che gestisce i round
             System.out.printf("=== INIZIO ROUND %d ===%n", round);
             for(int i = 0; i < NUM_PLAYER; i++) {
-                int numero_scelto = 0;
+                int numero_scelto;
                 do{                                                           // Inseriamo e verifichiamo la validità del numero scelto dal giocatore
-                    System.out.print(nomiGiocatori[i] + " inserisci il tuo numero fortunato(1-20): ");
+                    System.out.print(nomiGiocatori[i] + " inserisci il tuo numero fortunato(1-" + numMassimo + "): ");
                     numero_scelto = scan.nextInt();
-                    if(numero_scelto < 1 || numero_scelto > 20) System.out.println("Numero inserito non valido. Reinserire.");
-                }while(numero_scelto < 1 || numero_scelto > 20);
+                    if(numero_scelto < 1 || numero_scelto > numMassimo) System.out.println("Numero inserito non valido. Reinserire.");
+                }while(numero_scelto < 1 || numero_scelto > numMassimo);
                 scan.nextLine();
                 giocatoriRound[i] = new Giocatore(nomiGiocatori[i], numero_scelto, gg);
             }
 
-            inziaPartita(giocatoriRound);                                     // Avviamo i thread (quindi il gioco)
+            iniziaPartita(giocatoriRound);                                     // Avviamo i thread (quindi il gioco)
 
             System.out.println("Il numero vincente era: " + gg.getNumeroVincente());
             System.out.printf("=== FINE ROUND %d ===%n", round);
 
-            numeroVincente = rand.nextInt(1, 21);                 // Generiamo un nuovo numero vincente
+            numeroVincente = rand.nextInt(1, numMassimo);                // Generiamo un nuovo numero vincente
             gg.setNumeroVincente(numeroVincente);                              // Impostiamo il nuovo numero vincente nel gestore gioco
             for (int i = 0; i < NUM_PLAYER; i++) {                             // Ciclo per aggiornare i punteggi dei giocatori
                 punteggi[i] += giocatoriRound[i].getPunteggio();
